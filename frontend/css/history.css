@@ -1,0 +1,134 @@
+/* ── Parking History Page ── */
+
+/* Filter Row */
+.hist-filter-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.hist-tab {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--bg);
+  color: var(--text-2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.hist-tab.active {
+  background: var(--green);
+  color: var(--white);
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.25);
+}
+
+.hist-tab:hover:not(.active) {
+  background: var(--green-light);
+  color: var(--green);
+}
+
+/* History List */
+.hist-list {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* History Card */
+.hist-card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1.5px solid var(--border);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.hist-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: #d1d5db;
+}
+
+.hist-thumb {
+  width: 64px;
+  height: 80px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.hist-thumb-green  { background: linear-gradient(135deg, #43a047, #1b5e20); }
+.hist-thumb-orange { background: linear-gradient(135deg, #FF6B35, #d4460a); }
+.hist-thumb-blue   { background: linear-gradient(135deg, #2196F3, #0d47a1); }
+
+.hist-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hist-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: -0.2px;
+}
+
+.hist-loc {
+  font-size: 11px;
+  color: var(--text-2);
+  margin-bottom: 2px;
+}
+
+.hist-meta-line {
+  font-size: 11px;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hist-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 4px;
+}
+
+.hist-amt {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-1);
+}
+
+.hist-arrow {
+  width: 18px;
+  height: 18px;
+  color: var(--text-3);
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.hist-card:hover .hist-arrow {
+  transform: translateX(3px);
+  color: var(--green);
+}

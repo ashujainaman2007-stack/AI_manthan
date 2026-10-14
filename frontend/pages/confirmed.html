@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Booking Confirmed – ParkFlow</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/confirmed.css"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="../js/app.js" defer></script>
+</head>
+<body>
+<div class="phone-shell">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2"/></svg>
+    </div>
+  </div>
+
+  <!-- Back -->
+  <a href="slots.html" class="back-btn conf-back-btn" aria-label="Back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+  </a>
+
+  <div class="scroll-content conf-body">
+
+    <!-- Confetti + Check -->
+    <div class="conf-anim-wrap">
+      <div class="confetti-particle" style="--x:20%;--delay:0s;  --color:#4CAF50"></div>
+      <div class="confetti-particle" style="--x:70%;--delay:0.1s;--color:#2196F3"></div>
+      <div class="confetti-particle" style="--x:10%;--delay:0.2s;--color:#FF9800"></div>
+      <div class="confetti-particle" style="--x:85%;--delay:0.15s;--color:#E91E63"></div>
+      <div class="confetti-particle" style="--x:50%;--delay:0.05s;--color:#9C27B0"></div>
+      <div class="confetti-particle" style="--x:35%;--delay:0.3s; --color:#FFD700"></div>
+
+      <div class="check-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>
+
+    <h1 class="conf-title">Booking Confirmed!</h1>
+    <p class="conf-sub">Your parking slot has been reserved.</p>
+
+    <!-- Booking Details Card -->
+    <div class="booking-card">
+
+      <!-- Booking ID + QR -->
+      <div class="card-top">
+        <div>
+          <div class="card-small-label">Booking ID</div>
+          <div class="card-booking-id">PF20261010</div>
+        </div>
+        <div class="qr-code" title="QR Code">
+          <svg viewBox="0 0 80 80" width="56" height="56" xmlns="http://www.w3.org/2000/svg">
+            <rect width="80" height="80" fill="white"/>
+            <!-- QR pattern -->
+            <rect x="5" y="5" width="30" height="30" fill="none" stroke="#111" stroke-width="4"/>
+            <rect x="11" y="11" width="18" height="18" fill="#111"/>
+            <rect x="45" y="5" width="30" height="30" fill="none" stroke="#111" stroke-width="4"/>
+            <rect x="51" y="11" width="18" height="18" fill="#111"/>
+            <rect x="5" y="45" width="30" height="30" fill="none" stroke="#111" stroke-width="4"/>
+            <rect x="11" y="51" width="18" height="18" fill="#111"/>
+            <rect x="45" y="45" width="8" height="8" fill="#111"/>
+            <rect x="57" y="45" width="8" height="8" fill="#111"/>
+            <rect x="45" y="57" width="8" height="8" fill="#111"/>
+            <rect x="57" y="57" width="8" height="8" fill="#111"/>
+            <rect x="69" y="57" width="6" height="6" fill="#111"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card-divider-dashed"></div>
+
+      <!-- Venue -->
+      <div class="card-venue">
+        <div class="venue-thumb"></div>
+        <div>
+          <div class="venue-name">Central Parking</div>
+          <div class="venue-loc">Vijay Nagar, Indore</div>
+        </div>
+      </div>
+
+      <div class="card-divider"></div>
+
+      <!-- Details Grid -->
+      <div class="bk-details-list">
+        <div class="bk-detail-row">
+          <span class="bk-key">Slot Number</span>
+          <span class="bk-val" id="conf-slot">A-12</span>
+        </div>
+        <div class="bk-detail-row">
+          <span class="bk-key">Date</span>
+          <span class="bk-val">Tue, 10 Oct 2026</span>
+        </div>
+        <div class="bk-detail-row">
+          <span class="bk-key">Arrival Time</span>
+          <span class="bk-val">10:00 AM</span>
+        </div>
+        <div class="bk-detail-row">
+          <span class="bk-key">Duration</span>
+          <span class="bk-val">2 Hours</span>
+        </div>
+        <div class="bk-detail-row">
+          <span class="bk-key">Total Amount</span>
+          <span class="bk-val">₹40</span>
+        </div>
+        <div class="bk-detail-row">
+          <span class="bk-key">Status</span>
+          <span class="badge badge-green">Confirmed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <a href="bookings.html" class="btn-green" style="margin-top:8px">View My Bookings</a>
+    <button class="btn-outline" id="directions-btn" style="margin-top:10px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Get Directions
+    </button>
+
+    <div style="height:24px"></div>
+  </div>
+
+</div>
+<script src="../js/confirmed.js" defer></script>
+</body>
+</html>

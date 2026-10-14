@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Active Parking – ParkFlow</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/active.css"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="../js/app.js" defer></script>
+</head>
+<body>
+<div class="phone-shell">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2"/></svg>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <a href="bookings.html" class="back-btn" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <span class="page-title">Active Parking</span>
+    <div class="header-action"></div>
+  </div>
+
+  <div class="scroll-content active-body">
+
+    <!-- Timer Card -->
+    <div class="timer-card">
+      <div class="timer-label">Time Remaining</div>
+      <div class="timer-display">
+        <div class="timer-block">
+          <span class="t-num" id="t-hours">01</span>
+          <span class="t-unit">Hours</span>
+        </div>
+        <span class="t-colon">:</span>
+        <div class="timer-block">
+          <span class="t-num" id="t-mins">20</span>
+          <span class="t-unit">Minutes</span>
+        </div>
+        <span class="t-colon">:</span>
+        <div class="timer-block">
+          <span class="t-num" id="t-secs">15</span>
+          <span class="t-unit">Seconds</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Venue Card -->
+    <div class="active-venue-card">
+      <div class="av-thumb"></div>
+      <div class="av-info">
+        <div class="av-name">Central Parking</div>
+        <div class="av-loc">Vijay Nagar, Indore</div>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div class="active-details-card">
+      <div class="ad-row"><span class="ad-key">Slot Number</span><span class="ad-val">A-12</span></div>
+      <div class="ad-row"><span class="ad-key">Entry Time</span><span class="ad-val">10 Oct 2026, 10:00 AM</span></div>
+      <div class="ad-row"><span class="ad-key">Expected Exit</span><span class="ad-val">10 Oct 2026, 12:00 PM</span></div>
+      <div class="ad-row"><span class="ad-key">Duration</span><span class="ad-val">2 Hours</span></div>
+      <div class="ad-row"><span class="ad-key">Amount</span><span class="ad-val">₹40</span></div>
+      <div class="ad-row">
+        <span class="ad-key">Status</span>
+        <span class="badge badge-green">Active</span>
+      </div>
+    </div>
+
+    <!-- Directions -->
+    <div class="active-actions">
+      <button class="btn-outline" id="act-dir-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Get Directions
+      </button>
+    </div>
+
+    <!-- End Parking -->
+    <div class="end-wrap">
+      <a href="payment.html" class="btn-red" id="end-btn">End Parking (Exit)</a>
+    </div>
+
+  </div>
+
+</div>
+<script src="../js/active.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+/* ── Active Parking Page ── */
+.active-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+/* Timer Card */
+.timer-card {
+  background: var(--green-light); border: 1.5px solid var(--green-mid);
+  border-radius: 18px; padding: 20px 16px; text-align: center;
+}
+.timer-label {
+  font-size: 12px; font-weight: 700; color: var(--green);
+  letter-spacing: 0.5px; margin-bottom: 12px;
+}
+.timer-display { display: flex; align-items: flex-start; justify-content: center; gap: 6px; }
+.timer-block { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.t-num {
+  font-size: 46px; font-weight: 900; color: var(--green);
+  font-variant-numeric: tabular-nums; line-height: 1;
+  font-feature-settings: 'tnum';
+}
+.t-colon { font-size: 42px; font-weight: 900; color: var(--green); line-height: 1; margin-top: 0; }
+.t-unit  { font-size: 10px; font-weight: 600; color: var(--text-2); }
+
+/* Venue Card */
+.active-venue-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.av-thumb {
+  width: 60px; height: 60px; border-radius: 12px; flex-shrink: 0;
+  background: linear-gradient(135deg,#43a047,#1b5e20);
+}
+.av-name { font-size: 15px; font-weight: 700; color: var(--text-1); }
+.av-loc  { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+
+/* Details Card */
+.active-details-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm);
+}
+.ad-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 11px 14px; border-bottom: 1px solid var(--border);
+}
+.ad-row:last-child { border-bottom: none; }
+.ad-key { font-size: 12px; color: var(--text-2); font-weight: 500; }
+.ad-val { font-size: 13px; font-weight: 700; color: var(--text-1); }
+
+.active-actions { }
+.end-wrap { margin-top: 4px; padding-bottom: 16px; }

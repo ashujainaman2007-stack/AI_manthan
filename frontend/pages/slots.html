@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Select Parking Slot – ParkFlow</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/slots.css"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="../js/app.js" defer></script>
+</head>
+<body>
+<div class="phone-shell">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2"/></svg>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <a href="detail.html" class="back-btn" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <span class="page-title">Select Parking Slot</span>
+    <div class="header-action"></div>
+  </div>
+
+  <!-- Level Tabs -->
+  <div class="level-tabs">
+    <button class="level-tab active" data-level="b1" id="tab-b1">Basement 1</button>
+    <button class="level-tab" data-level="b2" id="tab-b2">Basement 2</button>
+    <button class="level-tab" data-level="g" id="tab-g">Ground</button>
+  </div>
+
+  <!-- Legend -->
+  <div class="slot-legend">
+    <div class="legend-item">
+      <div class="leg-dot available"></div><span>Available</span>
+    </div>
+    <div class="legend-item">
+      <div class="leg-dot occupied"></div><span>Occupied</span>
+    </div>
+    <div class="legend-item">
+      <div class="leg-dot reserved"></div><span>Reserved</span>
+    </div>
+  </div>
+
+  <!-- Slot Grid -->
+  <div class="slot-grid-area" id="slot-grid">
+
+    <!-- Row A1-A5 -->
+    <div class="slot-row">
+      <div class="slot available" data-slot="A1" id="s-A1">A1</div>
+      <div class="slot occupied"  data-slot="A2" id="s-A2">A2</div>
+      <div class="slot available" data-slot="A3" id="s-A3">A3</div>
+      <div class="slot available" data-slot="A4" id="s-A4">A4</div>
+      <div class="slot available" data-slot="A5" id="s-A5">A5</div>
+    </div>
+
+    <!-- Car visuals -->
+    <div class="car-lane">
+      <div class="car-icon">🚗</div>
+      <div class="lane-line"></div>
+      <div class="car-icon">🚙</div>
+    </div>
+
+    <!-- Row A6-A10 -->
+    <div class="slot-row">
+      <div class="slot available" data-slot="A6"  id="s-A6">A6</div>
+      <div class="slot occupied"  data-slot="A7"  id="s-A7">A7</div>
+      <div class="slot available" data-slot="A8"  id="s-A8">A8</div>
+      <div class="slot available" data-slot="A9"  id="s-A9">A9</div>
+      <div class="slot reserved"  data-slot="A10" id="s-A10">A10</div>
+    </div>
+
+    <!-- Row A11-A15 -->
+    <div class="slot-row">
+      <div class="slot available" data-slot="A11" id="s-A11">A11</div>
+      <div class="slot selected"  data-slot="A12" id="s-A12">A12</div>
+      <div class="slot available" data-slot="A13" id="s-A13">A13</div>
+      <div class="slot reserved"  data-slot="A14" id="s-A14">A14</div>
+      <div class="slot available" data-slot="A15" id="s-A15">A15</div>
+    </div>
+
+    <!-- Row A16-A20 -->
+    <div class="slot-row">
+      <div class="slot available" data-slot="A16" id="s-A16">A16</div>
+      <div class="slot available" data-slot="A17" id="s-A17">A17</div>
+      <div class="slot available" data-slot="A18" id="s-A18">A18</div>
+      <div class="slot available" data-slot="A19" id="s-A19">A19</div>
+      <div class="slot available" data-slot="A20" id="s-A20">A20</div>
+    </div>
+
+  </div>
+
+  <!-- Selected Slot Info Bar -->
+  <div class="selected-bar" id="selected-bar">
+    <div class="sel-left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="sel-car-icon"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5h-1"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+      <div>
+        <div class="sel-slot-id" id="sel-slot-id">A-12</div>
+        <div class="sel-slot-floor" id="sel-slot-floor">Basement 1</div>
+      </div>
+    </div>
+    <span class="sel-slot-status badge badge-green">Available</span>
+  </div>
+
+  <!-- Confirm Button -->
+  <div class="confirm-wrap">
+    <a href="confirmed.html" class="btn-green" id="confirm-btn">Confirm Slot</a>
+  </div>
+
+</div>
+<script src="../js/slots.js" defer></script>
+</body>
+</html>

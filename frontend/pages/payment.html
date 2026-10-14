@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Payment – ParkFlow</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/payment.css"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="../js/app.js" defer></script>
+</head>
+<body>
+<div class="phone-shell">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2"/></svg>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <a href="active.html" class="back-btn" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <span class="page-title">Payment</span>
+    <div class="header-action"></div>
+  </div>
+
+  <div class="scroll-content pay-body">
+
+    <!-- Summary Card -->
+    <div class="pay-summary-card">
+      <div class="pay-row">
+        <span class="pay-key">Parking Duration</span>
+        <span class="pay-val pay-val-bold">2h 10m</span>
+      </div>
+      <div class="pay-divider"></div>
+      <div class="pay-row">
+        <span class="pay-key">Base Amount</span>
+        <span class="pay-val">₹40</span>
+      </div>
+      <div class="pay-row">
+        <span class="pay-key">Extra Time (10 min)</span>
+        <span class="pay-val">₹10</span>
+      </div>
+      <div class="pay-divider"></div>
+      <div class="pay-row pay-total-row">
+        <span class="pay-key pay-total-key">Total Amount</span>
+        <span class="pay-total-amt" id="pay-total">₹50</span>
+      </div>
+    </div>
+
+    <!-- Payment Method -->
+    <div class="section-title" style="margin-top:8px">Select Payment Method</div>
+    <div class="pay-methods">
+
+      <!-- UPI -->
+      <div class="pay-method selected" data-method="upi" id="pm-upi">
+        <div class="pm-icon">
+          <svg viewBox="0 0 60 60" width="44" height="44">
+            <rect width="60" height="60" rx="12" fill="#fff"/>
+            <polygon points="30,6 54,30 30,54 6,30" fill="#097939"/>
+            <polygon points="30,18 42,30 30,42 18,30" fill="#ED752E"/>
+            <text x="19" y="36" font-size="12" font-weight="900" fill="white" font-family="Arial">UPI</text>
+          </svg>
+        </div>
+        <span class="pm-label">UPI</span>
+      </div>
+
+      <!-- Card -->
+      <div class="pay-method" data-method="card" id="pm-card">
+        <div class="pm-icon pm-icon-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2" style="width:28px;height:28px"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <span class="pm-label">Card</span>
+      </div>
+
+      <!-- Wallet -->
+      <div class="pay-method" data-method="wallet" id="pm-wallet">
+        <div class="pm-icon pm-icon-amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FF9800" stroke-width="2" style="width:28px;height:28px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="16" cy="15" r="1" fill="#FF9800"/></svg>
+        </div>
+        <span class="pm-label">Wallet</span>
+      </div>
+
+    </div>
+
+    <!-- UPI Section (dynamic) -->
+    <div class="upi-section" id="upi-section">
+      <input type="text" class="upi-input" id="upi-input" placeholder="Enter UPI ID (e.g. name@upi)" />
+    </div>
+
+    <!-- Card Section (hidden by default) -->
+    <div class="card-section hidden" id="card-section">
+      <input type="text" class="upi-input" placeholder="Card Number" maxlength="19" id="card-num"/>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <input type="text" class="upi-input" placeholder="MM/YY" maxlength="5" style="flex:1"/>
+        <input type="text" class="upi-input" placeholder="CVV" maxlength="3" style="flex:1"/>
+      </div>
+    </div>
+
+    <!-- Coupon -->
+    <button class="coupon-btn" id="coupon-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+      Apply Coupon
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;margin-left:auto"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <!-- Pay Button -->
+    <button class="btn-green pay-cta" id="pay-btn">Pay ₹50</button>
+
+    <div style="height:24px"></div>
+  </div>
+
+</div>
+<script src="../js/payment.js" defer></script>
+</body>
+</html>

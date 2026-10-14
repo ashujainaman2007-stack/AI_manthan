@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Parking History – ParkFlow</title>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/history.css"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="../js/app.js" defer></script>
+</head>
+<body>
+<div class="phone-shell">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2"/></svg>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <a href="bookings.html" class="back-btn" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <span class="page-title">Parking History</span>
+    <div class="header-action"></div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="hist-filter-row">
+    <button class="hist-tab active" data-hf="all"       id="hf-all">All</button>
+    <button class="hist-tab"        data-hf="completed" id="hf-completed">Completed</button>
+    <button class="hist-tab"        data-hf="cancelled" id="hf-cancelled">Cancelled</button>
+  </div>
+
+  <!-- History List -->
+  <div class="scroll-content hist-list" id="hist-list">
+
+    <!-- Item 1 -->
+    <a href="confirmed.html" class="hist-card" data-status="completed" id="hc-1">
+      <div class="hist-thumb hist-thumb-green"></div>
+      <div class="hist-info">
+        <div class="hist-name">Central Parking</div>
+        <div class="hist-loc">Vijay Nagar, Indore</div>
+        <div class="hist-meta-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          10 Oct 2026
+        </div>
+        <div class="hist-meta-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          10:00 AM – 12:10 PM
+        </div>
+        <div class="hist-meta-line">⏱ 2h 10m</div>
+        <div class="hist-foot">
+          <span class="hist-amt">₹50</span>
+          <span class="badge badge-green">Completed</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="hist-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <!-- Item 2 -->
+    <div class="hist-card" data-status="completed" id="hc-2">
+      <div class="hist-thumb hist-thumb-orange"></div>
+      <div class="hist-info">
+        <div class="hist-name">Phoenix Mall Parking</div>
+        <div class="hist-loc">Indore</div>
+        <div class="hist-meta-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          8 Oct 2026
+        </div>
+        <div class="hist-meta-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          11:20 AM – 01:20 PM
+        </div>
+        <div class="hist-meta-line">⏱ 2h</div>
+        <div class="hist-foot">
+          <span class="hist-amt">₹40</span>
+          <span class="badge badge-green">Completed</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="hist-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="hist-card" data-status="completed" id="hc-3">
+      <div class="hist-thumb hist-thumb-blue"></div>
+      <div class="hist-info">
+        <div class="hist-name">C21 Mall Parking</div>
+        <div class="hist-loc">Indore</div>
+        <div class="hist-meta-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          5 Oct 2026
+        </div>
+        <div class="hist-meta-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          09:30 AM – 11:30 AM
+        </div>
+        <div class="hist-meta-line">⏱ 2h</div>
+        <div class="hist-foot">
+          <span class="hist-amt">₹40</span>
+          <span class="badge badge-green">Completed</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="hist-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+
+  </div>
+
+</div>
+<script src="../js/history.js" defer></script>
+</body>
+</html>

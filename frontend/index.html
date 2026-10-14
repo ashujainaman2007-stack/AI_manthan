@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>ParkFlow – Smart Parking Management System</title>
+  <meta name="description" content="ParkFlow: Find, book, pay, and park with real-time smart slot detection."/>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <!-- Application CSS (Modular Architecture) -->
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/map.css"/>
+  <link rel="stylesheet" href="css/home.css"/>
+  <link rel="stylesheet" href="css/detail.css"/>
+  <link rel="stylesheet" href="css/slots.css"/>
+  <link rel="stylesheet" href="css/confirmed.css"/>
+  <link rel="stylesheet" href="css/bookings.css"/>
+  <link rel="stylesheet" href="css/active.css"/>
+  <link rel="stylesheet" href="css/payment.css"/>
+  <link rel="stylesheet" href="css/history.css"/>
+  <link rel="stylesheet" href="css/profile.css"/>
+
+  <!-- External Libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- Desktop Presentation Quick Bar -->
+  <div class="demo-quick-bar">
+    <button class="demo-btn active" data-view="home" data-view-target="home">🗺️ Home</button>
+    <button class="demo-btn" data-view="detail" data-view-target="detail">🏢 Details</button>
+    <button class="demo-btn" data-view="slots" data-view-target="slots">🅿️ Slots</button>
+    <button class="demo-btn" data-view="confirmed" data-view-target="confirmed">✅ Confirmed</button>
+    <button class="demo-btn" data-view="bookings" data-view-target="bookings">📋 Bookings</button>
+    <button class="demo-btn" data-view="active" data-view-target="active">⏱️ Active</button>
+    <button class="demo-btn" data-view="payment" data-view-target="payment">💳 Payment</button>
+    <button class="demo-btn" data-view="history" data-view-target="history">📜 History</button>
+    <button class="demo-btn" data-view="profile" data-view-target="profile">👤 Profile</button>
+  </div>
+
+  <!-- Mobile Phone Shell -->
+  <div class="phone-shell">
+
+    <!-- Dynamic Island Notch -->
+    <div class="dynamic-island">
+      <div class="island-camera"></div>
+      <div class="island-sensor"></div>
+    </div>
+
+    <!-- Universal Status Bar -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2"/></svg>
+      </div>
+    </div>
+
+    <!-- Main Viewport for All Screens -->
+    <div class="app-view-viewport">
+
+      <!-- ========================================== -->
+      <!-- VIEW 1: HOME (MAP, SEARCH, NEARBY)         -->
+      <!-- ========================================== -->
+      <section class="app-view active" id="view-home">
+        <!-- App Header -->
+        <div class="app-header">
+          <div class="logo-wrap">
+            <div class="logo-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span class="logo-text">ParkFlow</span>
+          </div>
+          <div class="header-right">
+            <button class="icon-btn" id="notif-btn" aria-label="Notifications" data-view-target="bookings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><circle cx="18" cy="6" r="3.5" fill="#F44336" stroke="none"/></svg>
+            </button>
+            <div class="user-avatar" id="home-avatar" title="My Profile" data-view-target="profile"></div>
+          </div>
+        </div>
+
+        <!-- Location Selector -->
+        <div class="location-bar">
+          <svg class="loc-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span class="loc-text" id="current-city-label">Vijay Nagar, Indore</span>
+          <svg class="loc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-section">
+          <label class="search-box" for="search-input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="search-input" placeholder="Search parking near you..." autocomplete="off"/>
+          </label>
+          <button class="filter-fab" id="filter-fab" aria-label="Filter" data-view-target="slots">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          </button>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="chips-row" id="chips-row">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="car">Car</button>
+          <button class="chip" data-filter="bike">Bike</button>
+          <button class="chip" data-filter="ev">EV</button>
+          <button class="chip" data-filter="covered">Covered</button>
+        </div>
+
+        <!-- Interactive Map Section -->
+        <div class="map-section-wrap">
+          <div id="leaflet-map"></div>
+
+          <!-- Live Badge Indicator -->
+          <div class="map-badge-tag">
+            <div class="live-green-pulse"></div>
+            <span>Indore Live Slots</span>
+          </div>
+
+          <!-- Floating Map Action Controls -->
+          <div class="map-floating-controls">
+            <button class="map-ctrl-btn" id="map-recenter-btn" title="My Location (Vijay Nagar)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2" fill="currentColor"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+            </button>
+            <button class="map-ctrl-btn" id="map-layer-btn" title="Toggle Map Style">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </button>
+            <button class="map-ctrl-btn" id="map-zoom-in" title="Zoom In">+</button>
+            <button class="map-ctrl-btn" id="map-zoom-out" title="Zoom Out">−</button>
+          </div>
+        </div>
+
+        <!-- Nearby Parking Card Preview -->
+        <div class="nearby-card" id="nearby-card" data-view-target="detail" style="cursor:pointer">
+          <div class="nearby-thumb nearby-thumb-green"></div>
+          <div class="nearby-info">
+            <div class="nearby-name">
+              Central Parking
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;margin-left:2px"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="nearby-rating">
+              <svg viewBox="0 0 24 24" stroke="#FFB800" fill="#FFB800" stroke-width="1" style="width:13px;height:13px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.6 (120+)
+            </div>
+            <div class="nearby-meta">₹40/hr · 20/50 slots available</div>
+          </div>
+          <div class="nearby-dist">86m</div>
+        </div>
+
+        <div style="height:80px"></div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 2: PARKING DETAILS                    -->
+      <!-- ========================================== -->
+      <section class="app-view" id="view-detail">
+        <div class="hero-section">
+          <div class="hero-img"></div>
+          <button class="hero-btn hero-back" data-view-target="home" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="hero-btn hero-fav" id="fav-btn" aria-label="Favourite">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="hero-counter">1/5</div>
+        </div>
+
+        <div class="scroll-content detail-body">
+          <div class="detail-name" id="dt-name">Central Parking</div>
+          <div class="detail-meta-row">
+            <div class="detail-rating">
+              <svg viewBox="0 0 24 24" stroke="#FFB800" fill="#FFB800" stroke-width="1" style="width:14px;height:14px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span id="dt-rating">4.6 (120+ reviews)</span>
+            </div>
+            <div class="detail-dist">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+              <span id="dt-dist">850 m</span>
+            </div>
+          </div>
+          <div class="detail-addr" id="dt-addr">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;color:var(--green)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Vijay Nagar, Indore
+          </div>
+
+          <div class="amenities">
+            <span class="amenity-tag">Covered</span>
+            <span class="amenity-tag">CCTV 24/7</span>
+            <span class="amenity-tag">Security Guard</span>
+            <span class="amenity-tag">EV Fast Charger</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="row-between" style="margin-bottom:10px">
+            <div class="section-title" style="margin:0">Available Slots</div>
+            <button class="link-green" data-view-target="slots" style="background:none;border:none;cursor:pointer;font-weight:700">20 / 50 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px"><polyline points="9 18 15 12 9 6"/></svg></button>
+          </div>
+          <div class="slots-summary">
+            <div class="slot-stat green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--green)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span class="ss-num">20</span><span class="ss-lbl">Available</span>
+            </div>
+            <div class="slot-stat red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--red)"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              <span class="ss-num">25</span><span class="ss-lbl">Occupied</span>
+            </div>
+            <div class="slot-stat amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--amber)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="ss-num">5</span><span class="ss-lbl">Reserved</span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section-title">Parking Rates</div>
+          <div class="rates-grid">
+            <div class="rate-card"><div class="rate-price">₹40</div><div class="rate-dur">2 Hours</div></div>
+            <div class="rate-card"><div class="rate-price">₹70</div><div class="rate-dur">4 Hours</div></div>
+            <div class="rate-card"><div class="rate-price">₹100</div><div class="rate-dur">6 Hours</div></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section-title">Select Date &amp; Time</div>
+          <div class="date-picker-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:var(--green)"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span class="date-text" id="sel-date">Tue, 10 Oct 2026</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;color:var(--text-2);margin-left:auto"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="time-row">
+            <div class="time-box">
+              <div class="time-lbl">Arrival Time</div>
+              <select class="time-sel" id="arrival-time">
+                <option>10:00 AM</option><option>10:30 AM</option><option>11:00 AM</option><option>12:00 PM</option>
+              </select>
+            </div>
+            <div class="time-box">
+              <div class="time-lbl">Duration</div>
+              <select class="time-sel" id="duration-sel">
+                <option value="2">2 Hours</option><option value="4">4 Hours</option><option value="6">6 Hours</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="total-bar">
+            <span class="total-label">Total Amount</span>
+            <span class="total-value" id="detail-total-amt">₹40</span>
+          </div>
+
+          <button class="btn-green" data-view-target="slots" id="book-btn">Select Parking Slot</button>
+          <div style="height:80px"></div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 3: SLOT SELECTION                     -->
+      <!-- ========================================== -->
+      <section class="app-view" id="view-slots">
+        <div class="page-header">
+          <button class="back-btn" data-view-target="detail" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="page-title">Select Parking Slot</span>
+          <div class="header-action"></div>
+        </div>
+
+        <div class="level-tabs">
+          <button class="level-tab active" data-level="b1">Basement 1</button>
+          <button class="level-tab" data-level="b2">Basement 2</button>
+          <button class="level-tab" data-level="g">Ground Floor</button>
+        </div>
+
+        <div class="legend-bar">
+          <div class="legend-item"><div class="legend-dot dot-available"></div>Available</div>
+          <div class="legend-item"><div class="legend-dot dot-occupied"></div>Occupied</div>
+          <div class="legend-item"><div class="legend-dot dot-reserved"></div>Reserved</div>
+          <div class="legend-item"><div class="legend-dot dot-selected"></div>Selected</div>
+        </div>
+
+        <div class="slot-instruction">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--green)"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5h-1"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+          Entry Gate · Drive towards Alley A
+        </div>
+
+        <div class="scroll-content slots-grid-container">
+          <div class="slot-row">
+            <div class="slot occupied" data-slot="A01">A01</div>
+            <div class="slot occupied" data-slot="A02">A02</div>
+            <div class="slot available" data-slot="A03">A03</div>
+            <div class="slot occupied" data-slot="A04">A04</div>
+            <div class="slot available" data-slot="A05">A05</div>
+          </div>
+          <div class="slot-row">
+            <div class="slot occupied" data-slot="A06">A06</div>
+            <div class="slot available" data-slot="A07">A07</div>
+            <div class="slot occupied" data-slot="A08">A08</div>
+            <div class="slot available" data-slot="A09">A09</div>
+            <div class="slot occupied" data-slot="A10">A10</div>
+          </div>
+          <div class="slot-row">
+            <div class="slot available" data-slot="A11">A11</div>
+            <div class="slot selected" data-slot="A12">A12</div>
+            <div class="slot available" data-slot="A13">A13</div>
+            <div class="slot reserved" data-slot="A14">A14</div>
+            <div class="slot available" data-slot="A15">A15</div>
+          </div>
+          <div class="slot-row">
+            <div class="slot available" data-slot="A16">A16</div>
+            <div class="slot available" data-slot="A17">A17</div>
+            <div class="slot available" data-slot="A18">A18</div>
+            <div class="slot available" data-slot="A19">A19</div>
+            <div class="slot available" data-slot="A20">A20</div>
+          </div>
+        </div>
+
+        <div class="selected-bar">
+          <div class="sel-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="sel-car-icon"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5h-1"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+            <div>
+              <div class="sel-slot-id" id="spa-sel-slot-id">A-12</div>
+              <div class="sel-slot-floor" id="spa-sel-slot-floor">Basement 1</div>
+            </div>
+          </div>
+          <span class="badge badge-green">Available</span>
+        </div>
+
+        <div class="confirm-wrap">
+          <button class="btn-green" data-view-target="confirmed" id="confirm-slot-btn">Confirm Slot</button>
+        </div>
+        <div style="height:80px"></div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 4: BOOKING CONFIRMED (QR TOKEN)       -->
+      <!-- ========================================== -->
+      <section class="app-view" id="view-confirmed">
+        <button class="back-btn conf-back-btn" data-view-target="slots" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <div class="scroll-content conf-body">
+          <div class="conf-anim-wrap">
+            <div class="confetti-particle" style="--x:20%;--delay:0s;--color:#4CAF50"></div>
+            <div class="confetti-particle" style="--x:70%;--delay:0.1s;--color:#2196F3"></div>
+            <div class="confetti-particle" style="--x:10%;--delay:0.2s;--color:#FF9800"></div>
+            <div class="confetti-particle" style="--x:85%;--delay:0.15s;--color:#E91E63"></div>
+            <div class="confetti-particle" style="--x:50%;--delay:0.05s;--color:#9C27B0"></div>
+            <div class="check-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+
+          <div class="conf-title">Booking Confirmed!</div>
+          <div class="conf-sub">Your parking slot has been reserved successfully</div>
+
+          <div class="booking-card-main">
+            <div class="qr-wrap">
+              <svg viewBox="0 0 100 100" class="qr-svg">
+                <rect width="100" height="100" fill="#fff"/>
+                <!-- Corner 1 -->
+                <rect x="5" y="5" width="28" height="28" fill="#111827" rx="3"/>
+                <rect x="9" y="9" width="20" height="20" fill="#fff" rx="2"/>
+                <rect x="13" y="13" width="12" height="12" fill="#111827" rx="1"/>
+                <!-- Corner 2 -->
+                <rect x="67" y="5" width="28" height="28" fill="#111827" rx="3"/>
+                <rect x="71" y="9" width="20" height="20" fill="#fff" rx="2"/>
+                <rect x="75" y="13" width="12" height="12" fill="#111827" rx="1"/>
+                <!-- Corner 3 -->
+                <rect x="5" y="67" width="28" height="28" fill="#111827" rx="3"/>
+                <rect x="9" y="71" width="20" height="20" fill="#fff" rx="2"/>
+                <rect x="13" y="75" width="12" height="12" fill="#111827" rx="1"/>
+                <!-- QR Dots -->
+                <rect x="37" y="8" width="6" height="6" fill="#111827"/><rect x="47" y="8" width="6" height="6" fill="#111827"/><rect x="57" y="8" width="6" height="6" fill="#111827"/>
+                <rect x="37" y="20" width="6" height="6" fill="#111827"/><rect x="51" y="20" width="6" height="6" fill="#111827"/>
+                <rect x="8" y="37" width="6" height="6" fill="#111827"/><rect x="20" y="37" width="6" height="6" fill="#111827"/><rect x="32" y="37" width="6" height="6" fill="#111827"/>
+                <rect x="44" y="37" width="12" height="6" fill="#111827"/><rect x="60" y="37" width="6" height="6" fill="#111827"/><rect x="72" y="37" width="10" height="6" fill="#111827"/>
+                <rect x="37" y="50" width="6" height="12" fill="#111827"/><rect x="47" y="47" width="8" height="8" fill="#1DB954" rx="2"/><rect x="59" y="50" width="6" height="6" fill="#111827"/>
+                <rect x="37" y="66" width="10" height="6" fill="#111827"/><rect x="51" y="66" width="6" height="10" fill="#111827"/><rect x="61" y="66" width="10" height="6" fill="#111827"/>
+                <rect x="37" y="76" width="6" height="10" fill="#111827"/><rect x="47" y="80" width="10" height="6" fill="#111827"/><rect x="61" y="76" width="6" height="10" fill="#111827"/><rect x="71" y="76" width="12" height="10" fill="#111827"/>
+              </svg>
+            </div>
+            <div class="qr-caption">Show this QR code at entry gate scanner</div>
+            <div class="booking-id-tag">Booking ID: <b id="spa-booking-id">PF-2026-9041</b></div>
+
+            <div class="card-divider"></div>
+
+            <div class="card-venue">
+              <div class="venue-thumb"></div>
+              <div>
+                <div class="venue-name">Central Parking</div>
+                <div class="venue-loc">Vijay Nagar, Indore</div>
+              </div>
+            </div>
+
+            <div class="card-divider"></div>
+
+            <div class="bk-details-list">
+              <div class="bk-detail-row"><span class="bk-key">Slot Number</span><span class="bk-val" id="conf-slot-val">A-12</span></div>
+              <div class="bk-detail-row"><span class="bk-key">Date</span><span class="bk-val">Tue, 10 Oct 2026</span></div>
+              <div class="bk-detail-row"><span class="bk-key">Arrival Time</span><span class="bk-val">10:00 AM</span></div>
+              <div class="bk-detail-row"><span class="bk-key">Duration</span><span class="bk-val">2 Hours</span></div>
+              <div class="bk-detail-row"><span class="bk-key">Amount</span><span class="bk-val">₹40</span></div>
+              <div class="bk-detail-row"><span class="bk-key">Status</span><span class="badge badge-green">Confirmed</span></div>
+            </div>
+          </div>
+
+          <button class="btn-green" data-view-target="bookings" style="margin-top:8px">View My Bookings</button>
+          <button class="btn-outline" id="conf-dir-btn" style="margin-top:10px" onclick="window.open('https://maps.google.com/?q=Central+Parking+Vijay+Nagar+Indore','_blank')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Get Directions
+          </button>
+          <div style="height:80px"></div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 5: MY BOOKINGS                        -->
+      <!-- ========================================== -->
+      <section class="app-view" id="view-bookings">
+        <div class="page-header">
+          <button class="back-btn" data-view-target="home" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="page-title">My Bookings</span>
+          <div class="header-action"></div>
+        </div>
+
+        <div class="bk-filter-tabs">
+          <button class="bk-tab active" data-filter="all">All</button>
+          <button class="bk-tab" data-filter="upcoming">Upcoming</button>
+          <button class="bk-tab" data-filter="active">Active</button>
+          <button class="bk-tab" data-filter="completed">Completed</button>
+          <button class="bk-tab" data-filter="cancelled">Cancelled</button>
+        </div>
+
+        <div class="scroll-content bk-list" id="spa-bk-list">
+          <!-- Active Card -->
+          <div class="bk-section" data-section="active">
+            <div class="section-title bk-section-label">Active Now</div>
+            <div class="bk-card" data-view-target="active">
+              <div class="bk-card-thumb thumb-green"></div>
+              <div class="bk-card-info">
+                <div class="bk-card-name">Central Parking</div>
+                <div class="bk-card-loc">Vijay Nagar, Indore</div>
+                <div class="bk-detail-line">Slot: <b>A-12</b> · Basement 1</div>
+                <div class="bk-detail-line">Time: <b>10:00 AM – 12:00 PM</b></div>
+                <div class="bk-live-badge">
+                  <div class="live-dot"></div>
+                  <span>Parked · 1h 20m remaining</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upcoming Card -->
+          <div class="bk-section" data-section="upcoming">
+            <div class="section-title bk-section-label">Upcoming</div>
+            <div class="bk-card" id="bk-phoenix">
+              <div class="bk-card-thumb thumb-orange"></div>
+              <div class="bk-card-info">
+                <div class="bk-card-name">Phoenix Mall Parking</div>
+                <div class="bk-card-loc">Indore</div>
+                <div class="bk-detail-line">Slot: <b>P-04</b> · Ground Floor</div>
+                <div class="bk-detail-line">Date: <b>Tomorrow, 11 Oct</b></div>
+                <div class="bk-detail-line">Time: <b>02:00 PM (3 Hours)</b></div>
+                <div class="bk-card-actions">
+                  <button class="bk-dir-btn" onclick="event.stopPropagation(); window.open('https://maps.google.com/?q=Phoenix+Citadel+Indore','_blank')">Directions</button>
+                  <button class="bk-cancel-btn" onclick="event.stopPropagation(); if(confirm('Cancel this upcoming booking?')) { this.closest('.bk-card').style.opacity='0.4'; alert('Booking cancelled.'); }">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="height:80px"></div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 6: ACTIVE PARKING COUNTDOWN TIMER     -->
+      <!-- ========================================== -->
+      <section class="app-view" id="view-active">
+        <div class="page-header">
+          <button class="back-btn" data-view-target="bookings" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="page-title">Active Parking</span>
+          <div class="header-action"></div>
+        </div>
+
+        <div class="scroll-content active-body">
+          <div class="timer-card">
+            <div class="timer-label">Time Remaining</div>
+            <div class="timer-display">
+              <div class="timer-block">
+                <span class="t-num" id="t-hours">01</span>
+                <span class="t-unit">Hours</span>
+              </div>
+              <span class="t-colon">:</span>
+              <div class="timer-block">
+                <span class="t-num" id="t-mins">20</span>
+                <span class="t-unit">Minutes</span>
+              </div>
+              <span class="t-colon">:</span>
+              <div class="timer-block">
+                <span class="t-num" id="t-secs">15</span>
+                <span class="t-unit">Seconds</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="active-venue-card">
+            <div class="av-thumb"></div>
+            <div class="av-info">
+              <div class="av-name">Central Parking</div>
+              <div class="av-loc">Vijay Nagar, Indore</div>
+            </div>
+          </div>
+
+          <div class="active-details-card">
+            <div class="ad-row"><span class="ad-key">Slot Number</span><span class="ad-val">A-12</span></div>
+            <div class="ad-row"><span class="ad-key">Entry Time</span><span class="ad-val">10 Oct 2026, 10:00 AM</span></div>
+            <div class="ad-row"><span class="ad-key">Expected Exit</span><span class="ad-val">10 Oct 2026, 12:00 PM</span></div>
+            <div class="ad-row"><span class="ad-key">Duration</span><span class="ad-val">2 Hours</span></div>
+            <div class="ad-row"><span class="ad-key">Amount</span><span class="ad-val">₹40</span></div>
+            <div class="ad-row"><span class="ad-key">Status</span><span class="badge badge-green">Active</span></div>
+          </div>
+
+          <div class="active-actions">
+            <button class="btn-outline" onclick="window.open('https://maps.google.com/?q=Central+Parking+Vijay+Nagar+Indore','_blank')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Get Directions
+            </button>
+          </div>
+
+          <div class="end-wrap">
+            <button class="btn-red" data-view-target="payment" id="end-parking-btn">End Parking (Proceed to Pay)</button>
+          </div>
+          <div style="height:80px"></div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 7: PAYMENT / CHECKOUT                 -->
+      <!-- ========================================== -->
+      <section class="app-view" id="view-payment">
+        <div class="page-header">
+          <button class="back-btn" data-view-target="active" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="page-title">Payment</span>
+          <div class="header-action"></div>
+        </div>
+
+        <div class="scroll-content pay-body">
+          <div class="pay-summary-card">
+            <div class="pay-row">
+              <span class="pay-key">Parking Duration</span>
+              <span class="pay-val pay-val-bold">2h 10m</span>
+            </div>
+            <div class="pay-divider"></div>
+            <div class="pay-row">
+              <span class="pay-key">Base Amount</span>
+              <span class="pay-val">₹40</span>
+            </div>
+            <div class="pay-row">
+              <span class="pay-key">Extra Time (10 min)</span>
+              <span class="pay-val">₹10</span>
+            </div>
+            <div class="pay-divider"></div>
+            <div class="pay-row pay-total-row">
+              <span class="pay-key pay-total-key">Total Amount</span>
+              <span class="pay-total-amt" id="spa-pay-total">₹50</span>
+            </div>
+          </div>
+
+          <div class="section-title" style="margin-top:8px">Select Payment Method</div>
+          <div class="pay-methods">
+            <div class="pay-method selected" data-method="upi" id="spa-pm-upi">
+              <div class="pm-icon">
+                <svg viewBox="0 0 60 60" width="44" height="44">
+                  <rect width="60" height="60" rx="12" fill="#fff"/>
+                  <polygon points="30,6 54,30 30,54 6,30" fill="#097939"/>
+                  <polygon points="30,18 42,30 30,42 18,30" fill="#ED752E"/>
+                  <text x="19" y="36" font-size="12" font-weight="900" fill="white" font-family="Arial">UPI</text>
+                </svg>
+              </div>
+              <span class="pm-label">UPI</span>
+            </div>
+
+            <div class="pay-method" data-method="card" id="spa-pm-card">
+              <div class="pm-icon pm-icon-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2" style="width:28px;height:28px"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              </div>
+              <span class="pm-label">Card</span>
+            </div>
+
+            <div class="pay-method" data-method="wallet" id="spa-pm-wallet">
+              <div class="pm-icon pm-icon-amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FF9800" stroke-width="2" style="width:28px;height:28px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="16" cy="15" r="1" fill="#FF9800"/></svg>
+              </div>
+              <span class="pm-label">Wallet</span>
+            </div>
+          </div>
+
+          <div class="upi-section" id="spa-upi-section">
+            <input type="text" class="upi-input" id="spa-upi-input" placeholder="Enter UPI ID (e.g. name@okhdfcbank)" value="user@okhdfcbank"/>
+          </div>
+
+          <div class="card-section hidden" id="spa-card-section">
+            <input type="text" class="upi-input" placeholder="Card Number (4321 0000 1234 5678)" maxlength="19"/>
+            <div style="display:flex;gap:10px;margin-top:10px">
+              <input type="text" class="upi-input" placeholder="MM/YY" maxlength="5" style="flex:1"/>
+              <input type="text" class="upi-input" placeholder="CVV" maxlength="3" style="flex:1"/>
+            </div>
+          </div>
+
+          <button class="coupon-btn" id="spa-coupon-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+            Apply Coupon (Try PARK10)
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;margin-left:auto"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <button class="btn-green pay-cta" id="spa-pay-btn">Pay ₹50</button>
+          <div style="height:80px"></div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 8: PARKING HISTORY                    -->
+      <!-- ========================================== -->
+      <section class="app-view" id="view-history">
+        <div class="page-header">
+          <button class="back-btn" data-view-target="bookings" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="page-title">Parking History</span>
+          <div class="header-action"></div>
+        </div>
+
+        <div class="hist-filter-row">
+          <button class="hist-tab active" data-hf="all">All</button>
+          <button class="hist-tab" data-hf="completed">Completed</button>
+          <button class="hist-tab" data-hf="cancelled">Cancelled</button>
+        </div>
+
+        <div class="scroll-content hist-list">
+          <div class="hist-card" data-status="completed" data-view-target="confirmed">
+            <div class="hist-thumb hist-thumb-green"></div>
+            <div class="hist-info">
+              <div class="hist-name">Central Parking</div>
+              <div class="hist-loc">Vijay Nagar, Indore</div>
+              <div class="hist-meta-line">📅 10 Oct 2026 · 10:00 AM – 12:10 PM</div>
+              <div class="hist-meta-line">⏱ 2h 10m</div>
+              <div class="hist-foot">
+                <span class="hist-amt">₹50</span>
+                <span class="badge badge-green">Completed</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="hist-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+
+          <div class="hist-card" data-status="completed" data-view-target="confirmed">
+            <div class="hist-thumb hist-thumb-orange"></div>
+            <div class="hist-info">
+              <div class="hist-name">Phoenix Mall Parking</div>
+              <div class="hist-loc">MR 10, Indore</div>
+              <div class="hist-meta-line">📅 8 Oct 2026 · 11:20 AM – 01:20 PM</div>
+              <div class="hist-meta-line">⏱ 2h</div>
+              <div class="hist-foot">
+                <span class="hist-amt">₹40</span>
+                <span class="badge badge-green">Completed</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="hist-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+
+          <div class="hist-card" data-status="completed" data-view-target="confirmed">
+            <div class="hist-thumb hist-thumb-blue"></div>
+            <div class="hist-info">
+              <div class="hist-name">C21 Mall Parking</div>
+              <div class="hist-loc">AB Road, Indore</div>
+              <div class="hist-meta-line">📅 5 Oct 2026 · 09:30 AM – 11:30 AM</div>
+              <div class="hist-meta-line">⏱ 2h</div>
+              <div class="hist-foot">
+                <span class="hist-amt">₹40</span>
+                <span class="badge badge-green">Completed</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="hist-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div style="height:80px"></div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 9: USER PROFILE & VEHICLES            -->
+      <!-- ========================================== -->
+      <section class="app-view" id="view-profile">
+        <div class="page-header">
+          <button class="back-btn" data-view-target="home" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="page-title">Profile</span>
+          <div class="header-action"></div>
+        </div>
+
+        <div class="scroll-content profile-body">
+          <div class="profile-header-card">
+            <div class="profile-avatar-wrap">
+              <div class="profile-avatar">RS</div>
+              <button class="avatar-edit-btn" aria-label="Edit avatar" onclick="alert('Profile photo upload')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </button>
+            </div>
+            <div class="profile-user-name">Rahul Sharma</div>
+            <div class="profile-user-phone">+91 98765 43210</div>
+            <div class="profile-user-email">rahul.sharma@example.com</div>
+            <div class="profile-badge-row">
+              <span class="badge badge-green">Verified Driver</span>
+              <span class="badge badge-amber">Gold Member</span>
+            </div>
+          </div>
+
+          <div class="profile-stats-grid">
+            <div class="p-stat-box">
+              <span class="p-stat-num">24</span>
+              <span class="p-stat-lbl">Parkings</span>
+            </div>
+            <div class="p-stat-box">
+              <span class="p-stat-num">₹980</span>
+              <span class="p-stat-lbl">Saved</span>
+            </div>
+            <div class="p-stat-box">
+              <span class="p-stat-num">4.9</span>
+              <span class="p-stat-lbl">Rating</span>
+            </div>
+          </div>
+
+          <div class="profile-section-title">
+            <span>Saved Vehicles</span>
+            <button class="link-btn-green" onclick="const p = prompt('Enter vehicle registration number (e.g. MP 09 XY 9999):'); if(p) alert('Vehicle ' + p.toUpperCase() + ' saved successfully!')">+ Add</button>
+          </div>
+          <div class="vehicle-list">
+            <div class="vehicle-card default">
+              <div class="vehicle-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--green)"><rect x="3" y="11" width="18" height="8" rx="2"/><path d="M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"/><circle cx="7.5" cy="15.5" r="1.5"/><circle cx="16.5" cy="15.5" r="1.5"/></svg>
+              </div>
+              <div class="vehicle-info">
+                <div class="vehicle-name">Hyundai Creta <span class="badge-tag">Default</span></div>
+                <div class="vehicle-plate">MP 09 AB 1234 · 4 Wheeler</div>
+              </div>
+            </div>
+
+            <div class="vehicle-card">
+              <div class="vehicle-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--text-2)"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h4"/></svg>
+              </div>
+              <div class="vehicle-info">
+                <div class="vehicle-name">Royal Enfield Classic 350</div>
+                <div class="vehicle-plate">MP 09 CD 5678 · 2 Wheeler</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-section-title">Quick Settings</div>
+          <div class="profile-menu">
+            <div class="menu-item" data-view-target="bookings">
+              <div class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <span class="menu-text">My Bookings</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="menu-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="menu-item" data-view-target="history">
+              <div class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <span class="menu-text">Parking History</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="menu-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="menu-item" data-view-target="payment">
+              <div class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+              <span class="menu-text">Wallet &amp; Payment Methods</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="menu-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="menu-item" onclick="alert('Support 24/7 Helpline: 1800-PARK-FLOW\nEmail: support@parkflow.in')">
+              <div class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <span class="menu-text">Help &amp; Support</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="menu-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <button class="logout-btn" onclick="if(confirm('Log out of ParkFlow?')) { alert('Logged out successfully.'); ParkFlowApp.navigateTo('home'); }">Log Out</button>
+          <div style="height:80px"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Universal Persistent Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" id="nav-home" data-view-target="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" id="nav-bookings" data-view-target="bookings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Bookings</span>
+      </button>
+      <button class="nav-item" id="nav-wallet" data-view-target="payment">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <span>Wallet</span>
+      </button>
+      <button class="nav-item" id="nav-profile" data-view-target="profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+  </div>
+
+</div>
+
+<!-- Core Application Scripts -->
+<script src="js/map.js"></script>
+<script src="js/app.js"></script>
+<script src="js/home.js"></script>
+<script src="js/detail.js"></script>
+<script src="js/slots.js"></script>
+<script src="js/confirmed.js"></script>
+<script src="js/bookings.js"></script>
+<script src="js/active.js"></script>
+<script src="js/payment.js"></script>
+<script src="js/history.js"></script>
+<script src="js/profile.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+/* ── Payment Page ── */
+.pay-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+
+/* Summary Card */
+.pay-summary-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm);
+}
+.pay-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 13px 16px;
+}
+.pay-divider { height: 1px; background: var(--border); margin: 0; }
+.pay-key { font-size: 13px; color: var(--text-2); font-weight: 500; }
+.pay-val { font-size: 14px; font-weight: 600; color: var(--text-1); }
+.pay-val-bold { font-size: 14px; font-weight: 700; color: var(--text-2); }
+.pay-total-row { background: var(--bg); }
+.pay-total-key { font-size: 15px; font-weight: 700; color: var(--text-1); }
+.pay-total-amt { font-size: 26px; font-weight: 900; color: var(--green); }
+
+/* Payment Methods */
+.pay-methods { display: flex; gap: 12px; }
+.pay-method {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  background: var(--white); border: 1.5px solid var(--border); border-radius: 14px;
+  padding: 14px 8px; cursor: pointer; transition: all 0.18s;
+  font-size: 12px; font-weight: 600; color: var(--text-2);
+}
+.pay-method.selected {
+  border-color: var(--green); background: var(--green-light); color: var(--green);
+  box-shadow: 0 3px 12px rgba(29,185,84,0.2);
+}
+.pay-method:hover:not(.selected) { border-color: var(--green); background: var(--bg); }
+.pm-icon {
+  width: 48px; height: 48px; border-radius: 12px; background: var(--bg);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.pm-label { font-size: 12px; font-weight: 700; }
+
+/* UPI / Card input */
+.upi-section, .card-section { }
+.hidden { display: none; }
+.upi-input {
+  width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 13px 14px; font-size: 14px; font-family: 'Inter', sans-serif;
+  color: var(--text-1); outline: none; background: var(--white); transition: border-color 0.18s;
+}
+.upi-input:focus { border-color: var(--green); }
+.upi-input::placeholder { color: var(--text-3); }
+
+/* Coupon */
+.coupon-btn {
+  width: 100%; display: flex; align-items: center; gap: 8px;
+  background: var(--white); border: 1.5px dashed var(--border); border-radius: 12px;
+  padding: 13px 14px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; color: var(--text-2); cursor: pointer; transition: all 0.18s;
+}
+.coupon-btn:hover { border-color: var(--green); color: var(--green); }
+
+/* Pay CTA */
+.pay-cta { font-size: 16px; }
