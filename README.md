@@ -78,7 +78,7 @@ SMARTparking/
 
 ---
 
-## 🗺️ Interactive Map (Indore Pilot Lots)
+## 🗺️ Interactive Map (Indore Parking Lots)
 
 The home screen features an interactive **Leaflet.js** map centered on **Vijay Nagar, Indore (`22.7533, 75.8937`)**:
 
